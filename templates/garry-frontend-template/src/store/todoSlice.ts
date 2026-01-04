@@ -16,8 +16,8 @@ const todoSlice = createSlice({
     toggle(state, action: PayloadAction<{ id: string }>) {
       const t = state.todos.find((x) => x.id === action.payload.id);
       if (t) t.done = !t.done;
-    }
-  }
+    },
+  },
 });
 
 export const { add, toggle } = todoSlice.actions;

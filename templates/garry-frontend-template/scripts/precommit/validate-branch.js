@@ -11,8 +11,7 @@ function getBranchName() {
 const branch = getBranchName();
 if (!branch) process.exit(0);
 
-const allowed =
-  /^(main|qa|develop|feature\/.+|fix\/.+|hotfix\/.+|release\/\d{2}-\d{2}-\d{4})$/;
+const allowed = /^(main|qa|develop|feature\/.+|fix\/.+|hotfix\/.+|release\/\d{2}-\d{2}-\d{4})$/;
 
 if (!allowed.test(branch)) {
   console.error(`Invalid branch name: ${branch}`);

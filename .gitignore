@@ -5,6 +5,6 @@ coverage/
 .idea
 .vscode
 .DS_Store
-temp/
 tmp/
+temp/
 *.tgz

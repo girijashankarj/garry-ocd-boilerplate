@@ -5,7 +5,7 @@ This is a minimal Vite + React + TypeScript starting project that follows Garry'
 Setup
 
 1. npm install
-2. npm run prepare  # enable Husky hooks
+2. npm run prepare # enable Husky hooks
 3. npm run dev
 
 Scripts

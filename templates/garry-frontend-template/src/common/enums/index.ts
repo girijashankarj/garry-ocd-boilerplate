@@ -1,2 +1,5 @@
 /* eslint-disable */
-export enum ThemeMode { LIGHT = 'light', DARK = 'dark' }
+export enum ThemeMode {
+  LIGHT = 'light',
+  DARK = 'dark',
+}

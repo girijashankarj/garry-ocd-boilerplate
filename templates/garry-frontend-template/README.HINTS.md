@@ -5,7 +5,7 @@ Notes for generated projects:
 - Changesets: This template requires a changeset file to be staged for every commit. Use `npx changeset` to create one.
 - Husky: Run `npm run prepare` after `npm install` to enable git hooks.
 - TypeScript is mandatory in this template.
-- Branch names are validated in pre-commit: main, qa, develop, feature/*, fix/*, hotfix/*, release/DD-MM-YYYY.
+- Branch names are validated in pre-commit: main, qa, develop, feature/_, fix/_, hotfix/\*, release/DD-MM-YYYY.
 - Project structure: a `src/common` folder exists with `enums`, `types`, `constants`, `interfaces`, and `utils` for shared utilities and types.
 - Config: `config/theme.json`, `config/client.json`, `config/env.json` are required and must not contain secrets.
 - CI: `.github/workflows/pr-check.yml` runs lint, format check, test structure, tests, and build on PRs.

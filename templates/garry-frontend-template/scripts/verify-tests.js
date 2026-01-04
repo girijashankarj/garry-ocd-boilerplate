@@ -28,7 +28,7 @@ function expectedTestPath(srcFile) {
 }
 
 const srcFiles = walk(srcRoot)
-  .filter((file) => (file.endsWith('.ts') || file.endsWith('.tsx')))
+  .filter((file) => file.endsWith('.ts') || file.endsWith('.tsx'))
   .filter((file) => !file.endsWith('.d.ts'));
 
 const missing = [];

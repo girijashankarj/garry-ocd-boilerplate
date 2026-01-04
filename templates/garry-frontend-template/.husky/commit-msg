@@ -1,11 +1,11 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-MSG_FILE=$1
-MSG=$(cat "$MSG_FILE")
+RED="\033[0;31m"
+GREEN="\033[0;32m"
+BLUE="\033[0;34m"
+NC="\033[0m"
 
-# Validate commit message format: '<ticket-number>: <message>'
-if ! printf "%s\n" "$MSG" | grep -qE '^[A-Za-z0-9-]+: .+'; then
-  echo "Invalid commit message format. Expected '<ticket-number>: <message>'"
-  exit 1
-fi
+echo "${BLUE}==> Commit message validation${NC}"
+npx --no-install commitlint --edit "$1" || { echo "${RED}Commit message format invalid. Use '<ticket-number>: <message>'.${NC}"; exit 1; }
+echo "${GREEN}Commit message format valid.${NC}"

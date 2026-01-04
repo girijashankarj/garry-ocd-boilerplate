@@ -1,0 +1,5 @@
+templates/
+tmp/
+tmp/
+node_modules/
+tmp-check/

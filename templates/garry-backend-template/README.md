@@ -5,7 +5,7 @@ This starter scaffold includes Express, TypeScript, and samples for logging and 
 Setup
 
 1. npm install
-2. npm run prepare  # enable Husky hooks
+2. npm run prepare # enable Husky hooks
 3. npm run dev
 
 Scripts

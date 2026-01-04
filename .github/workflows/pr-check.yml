@@ -35,10 +35,10 @@ jobs:
         run: npm run lint
 
       - name: Format check
-        run: npm run format:check || (echo "Run npm run format to fix" && exit 1)
+        run: npm run format || (echo "Run npm run format:fix to fix" && exit 1)
 
       - name: Run tests
-        run: npm test --silent
+        run: npm run test:coverage
 
       - name: Validate commit messages
         run: |
@@ -83,9 +83,9 @@ jobs:
           GIT_AUTHOR_EMAIL: actions@github.com
         run: |
           if [ "${{ matrix.template }}" = "garry-frontend-template" ]; then
-            node ./bin/cli.js --non-interactive --name ci-${{ matrix.template }} --type frontend --module ESM --yes --dry-run
+            node ./bin/cli.js --non-interactive --name ci-${{ matrix.template }} --type frontend --yes --dry-run
           else
-            node ./bin/cli.js --non-interactive --name ci-${{ matrix.template }} --type backend --module ESM --yes --dry-run
+            node ./bin/cli.js --non-interactive --name ci-${{ matrix.template }} --type backend --yes --dry-run
           fi
 
       - name: Cache generated project node_modules
@@ -112,9 +112,9 @@ jobs:
           GIT_AUTHOR_EMAIL: actions@github.com
         run: |
           if [ "${{ matrix.template }}" = "garry-frontend-template" ]; then
-            node ./bin/cli.js --non-interactive --name ci-dry-${{ matrix.template }} --type frontend --module ESM --yes --dry-run
+            node ./bin/cli.js --non-interactive --name ci-dry-${{ matrix.template }} --type frontend --yes --dry-run
           else
-            node ./bin/cli.js --non-interactive --name ci-dry-${{ matrix.template }} --type backend --module ESM --yes --dry-run
+            node ./bin/cli.js --non-interactive --name ci-dry-${{ matrix.template }} --type backend --yes --dry-run
           fi
           # Ensure dry-run did not produce node_modules
           if [ -d "ci-dry-${{ matrix.template }}/node_modules" ]; then

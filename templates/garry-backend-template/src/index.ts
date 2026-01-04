@@ -34,7 +34,13 @@ async function start() {
   try {
     await sequelize.sync();
     app.listen(port, () =>
-      loggerInfo(INFO_MESSAGES.APP_STARTED, { port }, OPERATIONS.SERVER_START, FILE_NAMES.SERVER, 'start')
+      loggerInfo(
+        INFO_MESSAGES.APP_STARTED,
+        { port },
+        OPERATIONS.SERVER_START,
+        FILE_NAMES.SERVER,
+        'start'
+      )
     );
   } catch (err) {
     loggerError(ERROR_MESSAGES.DB, err, OPERATIONS.SERVER_START, FILE_NAMES.SERVER, 'start');
