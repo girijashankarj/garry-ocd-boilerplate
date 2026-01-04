@@ -1,0 +1,10 @@
+:root{
+  --bg:#fff;
+  --text:#111;
+}
+.theme-dark{
+  --bg:#0b0b0b;
+  --text:#fff;
+}
+body{background:var(--bg);color:var(--text);font-family:system-ui,Arial}
+.container{padding:2rem}
