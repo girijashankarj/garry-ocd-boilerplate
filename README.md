@@ -55,6 +55,10 @@ Generated project structure (high level)
 - `tests/mock/` — mock constants and factories for tests only.
 - Templates are TypeScript-only by default.
 
+Documentation
+
+- Single master doc: `docs/PROJECT-DOCS.md` (requirements, architecture, workflows, testing, runbooks, and inventories).
+
 How to try a scaffold locally
 
 1. Clone this repo and run:
