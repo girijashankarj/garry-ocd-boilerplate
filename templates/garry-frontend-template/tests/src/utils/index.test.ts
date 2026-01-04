@@ -1,5 +1,6 @@
-import { cloneDeep } from '../../../src/utils';
+import * as utils from '../../../src/utils';
 
 test('utils index exports', () => {
-  expect(typeof cloneDeep).toBe('function');
+  expect(utils.loggerInfo).toBeDefined();
+  expect(utils.lodashUtils).toBeDefined();
 });

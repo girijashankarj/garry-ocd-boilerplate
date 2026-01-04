@@ -9,7 +9,9 @@ Notes for generated projects:
 - Project structure: a `src/common` folder exists with `enums`, `types`, `constants`, `interfaces`, and `utils` for shared utilities and types.
 - Config: `config/theme.json`, `config/client.json`, `config/env.json` are required and must not contain secrets.
 - CI: `.github/workflows/pr-check.yml` runs lint, format check, test structure, tests, and build on PRs.
-- API patterns: For apps that include APIs, follow `src/apis/<resource>/{handlers,requestSchema,responseSchema,logic,preOperation,postOperation,validation,businessValidation,sql}` as a recommended pattern.
+- User portal: `src/components` includes CRUD UI for users and uses `src/utils/dataUtils.ts`.
+- Data mode: `VITE_DATA_MODE=csv` uses local CSV storage (localStorage). Set `VITE_DATA_MODE=api` to switch to `apiUtils`.
+- Tests: Jest uses an 80% coverage threshold by default.
 - Tests: every `src` code file should have a matching test file under `tests/src` with the same path (e.g. `src/App.tsx` -> `tests/src/App.test.tsx`). Run `npm run test:structure` to validate.
 - Docs: All documentation is consolidated in `docs/PROJECT-DOCS.md`.
-- Auto-install / presets: When generating with `--yes`, the CLI will run the detected package manager to install dependencies (use `--dry-run` to skip install for CI). Use `--preset frontend-full` to get a TS + Tailwind + Redux + Lottie starter.
+- The scaffolder runs in interactive mode only. Follow prompts and confirm before generation.

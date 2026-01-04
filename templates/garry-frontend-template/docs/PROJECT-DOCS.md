@@ -32,6 +32,7 @@ Scope
 - Vite + React + TypeScript.
 - Optional Tailwind/Bulma and Redux.
 - Lottie example and theme toggle.
+- User management UI (CRUD) using CSV-backed data utils (localStorage).
 
 Out of scope
 
@@ -195,7 +196,7 @@ Policy
 
 Coverage
 
-- Minimum 70% across metrics.
+- Minimum 80% across metrics.
 
 Test types
 
@@ -305,7 +306,7 @@ Functional
 Quality
 
 - npm run lint passes with zero warnings
-- npm run test passes with coverage >= 70%
+- npm run test passes with coverage >= 80%
 - npm run test:structure passes
 
 Config
@@ -316,7 +317,7 @@ Config
 ## QA checklist
 
 - Verify UI renders with light/dark toggle.
-- Ensure tests pass and coverage >= 70%.
+- Ensure tests pass and coverage >= 80%.
 - Confirm no lint warnings.
 - Validate config files load correctly.
 

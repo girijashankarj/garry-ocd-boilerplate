@@ -103,7 +103,7 @@ Purpose
 
 Primary capabilities
 
-- Interactive and non-interactive CLI for project creation.
+- Interactive CLI for project creation.
 - Frontend template with Vite, React, and TypeScript.
 - Backend template with Express, TypeScript, and AJV validation.
 - Strict linting, formatting, and test structure enforcement.
@@ -127,7 +127,7 @@ Business requirements
 Technical requirements
 
 - TypeScript only.
-- Test coverage at least 70 percent.
+- Test coverage at least 80 percent.
 - Tests must mirror src structure.
 - Pre-commit must run lint:fix, format:fix, test:coverage, and changeset checks.
 - Branch and commit naming rules enforced.
@@ -139,7 +139,7 @@ Operational requirements
 - CI must run on PRs to main, qa, and develop.
 - CI must mirror pre-commit behavior.
 - Release must be traceable to changesets.
-- Offline install smoke checks must pass in CI.
+- CI checks must pass for every PR.
 
 ## CLI behavior
 
@@ -158,20 +158,9 @@ Interactive flow
 - Ask for confirmation before writing files
 - Ask whether to run npm install and tests
 
-Non-interactive flow
+Interactive-only flow
 
-- Requires --name and --type
-- Use --yes to confirm and run npm install and tests
-- Use --dry-run to skip install and tests
-
-Flags
-
-- --non-interactive
-- --yes
-- --dry-run
-- --name <project-name>
-- --type <frontend|backend>
-- --path <target-path>
+- This CLI runs with prompts only (no flags).
 
 ## Template overview
 
@@ -186,6 +175,7 @@ Backend template
 
 - Express + TypeScript
 - AJV validation and structured handler pattern
+- Basic bearer-token auth middleware (API_TOKEN)
 - Swagger UI for API docs
 - Sequelize + sqlite example
 
@@ -258,6 +248,22 @@ my-api/
 │   └── verify-tests.js
 ├── src/
 │   ├── apis/
+│   │   ├── common/
+│   │   │   ├── constants/
+│   │   │   ├── enums/
+│   │   │   ├── interfaces/
+│   │   │   ├── sql.ts
+│   │   │   ├── types/
+│   │   │   └── utils/
+│   │   ├── handlers/
+│   │   │   ├── create-user/
+│   │   │   ├── delete-user/
+│   │   │   ├── get-user/
+│   │   │   └── update-user/
+│   │   ├── helpers/
+│   │   ├── index.ts
+│   │   ├── routes.ts
+│   │   └── withWrap.ts
 │   ├── common/
 │   ├── db/
 │   ├── models/
@@ -279,11 +285,7 @@ Interactive flow (ASCII)
 [User] -> [CLI prompts] -> [Summary] -> [Confirm] -> [Copy template] -> [Update package.json] -> [Optional install/test]
 ```
 
-Non-interactive flow (ASCII)
-
-```
-[Script] -> [CLI flags] -> [Summary] -> [Auto confirm] -> [Copy template] -> [Optional install/test]
-```
+No non-interactive flow is supported (interactive prompts only).
 
 ## Configuration management
 
@@ -345,7 +347,7 @@ Rules
 - QA-001 Verify lint passes with zero warnings.
 - QA-002 Verify prettier check passes.
 - QA-003 Verify test:structure passes for all src files.
-- QA-004 Verify coverage is >= 70 percent.
+- QA-004 Verify coverage is >= 80 percent.
 - QA-005 Verify config files load correctly.
 - QA-006 Verify theme toggle behavior.
 - QA-007 Verify Lottie render path if enabled.
@@ -355,7 +357,7 @@ Rules
 - QA-011 Verify lint passes with zero warnings.
 - QA-012 Verify prettier check passes.
 - QA-013 Verify test:structure passes for all src files.
-- QA-014 Verify coverage is >= 70 percent.
+- QA-014 Verify coverage is >= 80 percent.
 - QA-015 Verify config files load correctly.
 - QA-016 Verify theme toggle behavior.
 - QA-017 Verify Lottie render path if enabled.
@@ -365,7 +367,7 @@ Rules
 - QA-021 Verify lint passes with zero warnings.
 - QA-022 Verify prettier check passes.
 - QA-023 Verify test:structure passes for all src files.
-- QA-024 Verify coverage is >= 70 percent.
+- QA-024 Verify coverage is >= 80 percent.
 - QA-025 Verify config files load correctly.
 - QA-026 Verify theme toggle behavior.
 - QA-027 Verify Lottie render path if enabled.
@@ -375,7 +377,7 @@ Rules
 - QA-031 Verify lint passes with zero warnings.
 - QA-032 Verify prettier check passes.
 - QA-033 Verify test:structure passes for all src files.
-- QA-034 Verify coverage is >= 70 percent.
+- QA-034 Verify coverage is >= 80 percent.
 - QA-035 Verify config files load correctly.
 - QA-036 Verify theme toggle behavior.
 - QA-037 Verify Lottie render path if enabled.
@@ -385,7 +387,7 @@ Rules
 - QA-041 Verify lint passes with zero warnings.
 - QA-042 Verify prettier check passes.
 - QA-043 Verify test:structure passes for all src files.
-- QA-044 Verify coverage is >= 70 percent.
+- QA-044 Verify coverage is >= 80 percent.
 - QA-045 Verify config files load correctly.
 - QA-046 Verify theme toggle behavior.
 - QA-047 Verify Lottie render path if enabled.
@@ -395,7 +397,7 @@ Rules
 - QA-051 Verify lint passes with zero warnings.
 - QA-052 Verify prettier check passes.
 - QA-053 Verify test:structure passes for all src files.
-- QA-054 Verify coverage is >= 70 percent.
+- QA-054 Verify coverage is >= 80 percent.
 - QA-055 Verify config files load correctly.
 - QA-056 Verify theme toggle behavior.
 - QA-057 Verify Lottie render path if enabled.

@@ -1,7 +1,8 @@
 import { DataTypes, Model } from 'sequelize';
+import type { UserAttributes, UserCreationAttributes } from '../common/types';
 import { sequelize } from '../db/index.js';
 
-export class User extends Model {
+export class User extends Model<UserAttributes, UserCreationAttributes> {
   declare id: number;
   declare name: string;
   declare email: string;

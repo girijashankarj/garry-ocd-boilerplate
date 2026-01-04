@@ -1,8 +1,12 @@
 module.exports = {
-  preset: 'ts-jest',
+  preset: 'ts-jest/presets/default-esm',
   testEnvironment: 'node',
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   collectCoverage: true,
   testMatch: ['<rootDir>/tests/**/*.test.ts'],
-  coverageThreshold: { global: { branches: 70, functions: 70, lines: 70, statements: 70 } },
+  extensionsToTreatAsEsm: ['.ts'],
+  moduleNameMapper: {
+    '^(\\.{1,2}/.*)\\.js$': '$1',
+  },
+  coverageThreshold: { global: { branches: 80, functions: 80, lines: 80, statements: 80 } },
 };

@@ -26,7 +26,8 @@ Folder structure
 - `config/` — theme, client, and env JSON configs (no secrets).
 - `src/common/` — enums, types, constants, interfaces, messages, file names, operations.
 - `src/utils/` — shared utilities (logger and lodash wrappers).
-- `src/apis/` — API modules using the handlers/logic/validation pattern and `withWrap`.
+- `src/apis/` — API modules with `routes.ts`, `withWrap.ts`, and per-resource handlers under `handlers/`.
+- `src/apis/helpers/authMiddleware.ts` — basic bearer-token auth middleware (uses `API_TOKEN`).
 - `src/db/` — Sequelize connection.
 - `src/models/` — Sequelize models.
 - `tests/src/` — mirrors `src` with matching `*.test.ts` files.
@@ -40,9 +41,11 @@ Dependencies (what they are for)
 - `swagger-ui-express`, `yamljs` — Swagger UI + OpenAPI spec loading
 - `lodash` — shared utility functions (centralized in `src/utils/lodashUtils.ts`)
 - `winston` — structured logging utility
+- `http-status-codes` — HTTP status constants
 
 Notes
 
 - Add your OpenAPI spec to `src/openapi/` and the scaffold exposes Swagger UI at `/docs` by default (template stub to be implemented).
+- Set `API_TOKEN` to enable the default auth middleware in `src/apis/routes.ts`.
 - Changesets are required on commits. Use `npx changeset` to create and stage a changeset before committing.
 - For configuration details and workflow expectations, read `docs/PROJECT-DOCS.md`.

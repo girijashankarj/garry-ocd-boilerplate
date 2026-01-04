@@ -1,16 +1,6 @@
 // Centralize lodash imports so other files only import from this module.
-import cloneDeep from 'lodash/cloneDeep';
-import get from 'lodash/get';
-import isEqual from 'lodash/isEqual';
-import merge from 'lodash/merge';
-import set from 'lodash/set';
+import * as lodash from 'lodash';
 
-export const lodashUtils = {
-  cloneDeep,
-  get,
-  isEqual,
-  merge,
-  set,
-};
-
-export { cloneDeep, get, isEqual, merge, set };
+export const lodashUtils = lodash;
+export const { cloneDeep, get, isEqual, merge, set } = lodash;
+export default lodashUtils;

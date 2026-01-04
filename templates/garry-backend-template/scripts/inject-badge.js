@@ -1,11 +1,16 @@
 #!/usr/bin/env node
 const fs = require('fs');
 const path = require('path');
-const argv = require('minimist')(process.argv.slice(2));
+const args = process.argv.slice(2);
+const argValue = (key) => {
+  const index = args.indexOf(`--${key}`);
+  if (index === -1) return undefined;
+  return args[index + 1];
+};
 
 // Usage: node scripts/inject-badge.js --repo owner/repo --badge pr-check
-const repo = argv.repo;
-const badge = argv.badge || 'pr-check';
+const repo = argValue('repo');
+const badge = argValue('badge') || 'pr-check';
 if (!repo) {
   console.error('Usage: --repo owner/repo');
   process.exit(1);

@@ -25,8 +25,7 @@
   "dependencies": {
     "chalk": "^4.1.2",
     "enquirer": "^2.3.6",
-    "fs-extra": "^11.1.1",
-    "minimist": "^1.2.8"
+    "fs-extra": "^11.1.1"
   },
   "devDependencies": {
     "@changesets/cli": "^2.26.2",

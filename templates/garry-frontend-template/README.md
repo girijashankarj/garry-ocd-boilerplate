@@ -25,7 +25,7 @@ Folder structure
 - `config/` — theme, client, and env JSON configs (no secrets).
 - `src/common/` — enums, types, constants, interfaces, messages, file names, operations.
 - `src/utils/` — shared utilities (logger and lodash wrappers).
-- `src/components/` — UI components (includes Lottie example).
+- `src/components/` — UI components (user CRUD + Lottie example).
 - `src/store/` — Redux store and slices.
 - `tests/src/` — mirrors `src` with matching `*.test.ts/tsx` files.
 - `tests/mock/` — test-only mock data and factories.
@@ -41,6 +41,7 @@ Dependencies (what they are for)
 
 Notes
 
+- User portal UI uses `src/utils/dataUtils.ts` for CSV-backed storage (localStorage).
 - Lottie sample is included (`src/components/LottieExample.tsx`). Replace `src/assets/animations/sample.json` with your animation.
 - Favicon default is `public/favicon.svg` and Font Awesome CDN is included in `index.html` (optional to remove).
 - Changesets are required on commits. Use `npx changeset` to create and stage a changeset before committing.

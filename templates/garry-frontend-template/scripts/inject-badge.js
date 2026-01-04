@@ -1,9 +1,14 @@
 #!/usr/bin/env node
 const fs = require('fs');
 const path = require('path');
-const argv = require('minimist')(process.argv.slice(2));
-const repo = argv.repo;
-const badge = argv.badge || 'frontend-ci';
+const args = process.argv.slice(2);
+const argValue = (key) => {
+  const index = args.indexOf(`--${key}`);
+  if (index === -1) return undefined;
+  return args[index + 1];
+};
+const repo = argValue('repo');
+const badge = argValue('badge') || 'frontend-ci';
 if (!repo) {
   console.error('Usage: --repo owner/repo');
   process.exit(1);

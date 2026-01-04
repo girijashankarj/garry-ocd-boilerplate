@@ -1,0 +1,16 @@
+{
+  "type": "object",
+  "properties": {
+    "ok": { "type": "boolean" },
+    "data": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" }
+      },
+      "required": ["id"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["ok", "data"],
+  "additionalProperties": false
+}

@@ -6,5 +6,4 @@ coverage/
 .vscode
 .DS_Store
 tmp/
-temp/
 *.tgz

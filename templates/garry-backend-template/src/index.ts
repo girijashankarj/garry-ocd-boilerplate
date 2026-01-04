@@ -7,7 +7,7 @@ import { INFO_MESSAGES } from './common/messages/info';
 import { FILE_NAMES } from './common/fileNames';
 import { OPERATIONS } from './common/operations';
 import { loggerError, loggerInfo, loggerWarn } from './utils/loggerUtils';
-import usersApi from './apis/users/index.js';
+import { createApiRouter } from './apis/routes.js';
 const app = express();
 
 app.use(express.json());
@@ -22,8 +22,8 @@ try {
   loggerWarn(ERROR_MESSAGES.UNEXPECTED, err, OPERATIONS.SERVER_START, FILE_NAMES.SERVER, 'swagger');
 }
 
-// Mount example users API (follows the /src/apis/* pattern)
-app.use('/api/users', usersApi);
+// Mount APIs (follows the /src/apis/* pattern)
+app.use('/api', createApiRouter());
 
 import { sequelize } from './db/index.js';
 import './models/user.js';

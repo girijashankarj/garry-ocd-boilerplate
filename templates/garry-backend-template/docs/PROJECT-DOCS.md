@@ -153,7 +153,7 @@ Flow
 
 Rules
 
-- Use withWrap for handlers.
+- Use withWrap (src/apis/withWrap.ts) for handlers.
 - No mutation of inputs.
 
 ASCII flow
@@ -194,7 +194,7 @@ Structure
 
 Rules
 
-- Wrap handlers with withWrap.
+- Wrap handlers with withWrap from src/apis/withWrap.ts.
 - Validation uses AJV.
 - SQL strings only in sql.ts.
 
@@ -208,7 +208,7 @@ Policy
 
 Coverage
 
-- Minimum 70% across metrics.
+- Minimum 80% across metrics.
 
 Test types
 
@@ -318,7 +318,7 @@ Functional
 Quality
 
 - npm run lint passes with zero warnings
-- npm run test passes with coverage >= 70%
+- npm run test passes with coverage >= 80%
 - npm run test:structure passes
 
 Config
@@ -330,7 +330,7 @@ Config
 
 - Validate request schema errors return 400.
 - Verify business validation paths.
-- Confirm tests pass and coverage >= 70%.
+- Confirm tests pass and coverage >= 80%.
 - Ensure no lint warnings.
 
 ## DevOps checklist

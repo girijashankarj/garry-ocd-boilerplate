@@ -1,16 +1,138 @@
 :root {
-  --bg: #fff;
-  --text: #111;
+  --bg: #f6f8fb;
+  --text: #0f172a;
+  --card: #ffffff;
+  --accent: #00a37a;
+  --accent-2: #1e293b;
+  --danger: #b42318;
+  --muted: #64748b;
 }
+
 .theme-dark {
-  --bg: #0b0b0b;
-  --text: #fff;
+  --bg: #0b1220;
+  --text: #e2e8f0;
+  --card: #121a2b;
+  --accent: #00d39f;
+  --accent-2: #f8fafc;
+  --danger: #f97066;
+  --muted: #94a3b8;
 }
+
+* {
+  box-sizing: border-box;
+}
+
 body {
+  margin: 0;
+  font-family: 'Space Grotesk', sans-serif;
   background: var(--bg);
   color: var(--text);
-  font-family: system-ui, Arial;
 }
+
 .container {
-  padding: 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.toggle {
+  border: 1px solid var(--muted);
+  background: transparent;
+  color: var(--text);
+  padding: 6px 12px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, rgba(0, 163, 122, 0.15), transparent);
+  padding: 16px;
+  border-radius: 16px;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 16px;
+}
+
+.card {
+  background: var(--card);
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+input,
+select {
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--muted);
+  background: transparent;
+  color: var(--text);
+}
+
+button {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+button.ghost {
+  background: transparent;
+  color: var(--accent-2);
+  border: 1px solid var(--muted);
+}
+
+button.danger {
+  background: var(--danger);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  text-align: left;
+  padding: 10px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.alert {
+  background: rgba(255, 223, 186, 0.2);
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: var(--accent-2);
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
 }

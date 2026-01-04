@@ -29,7 +29,7 @@ Repository structure (scaffolder)
 - `templates/garry-frontend-template/` — frontend template source.
 - `templates/garry-backend-template/` — backend template source.
 - `docs/` — requirements and project documentation.
-- `tests/` — CLI tests for scaffolding, flags, and presets.
+- `tests/` — CLI tests for scaffolding and validation.
 
 Package scripts (scaffolder)
 
@@ -48,7 +48,6 @@ Package scripts (scaffolder)
 Scaffolder dependencies (what they are for)
 
 - `enquirer` — interactive prompts
-- `minimist` — CLI flag parsing
 - `fs-extra` — file copy/dir utilities
 - `chalk` — CLI output formatting
 
@@ -84,22 +83,6 @@ How to try a scaffold locally
 3. Follow prompts (project name, type, project path). The CLI shows dependencies, dev dependencies, scripts, and structure, then asks for confirmation before creating files.
 4. When prompted, choose whether to run `npm install` and `npm test` immediately after scaffolding.
 
-Non-interactive / CI usage
-
-You can run the CLI in non-interactive mode (for CI or scripts) using flags. Example:
-
-node ./bin/cli.js --non-interactive --name my-app --type frontend
-
-Supported flags:
-
-- `--non-interactive` — run without prompts (use with `--name` and `--type`)
-- `--yes` — non-interactive shorthand; runs without prompts and will auto-install dependencies unless `--dry-run` is specified
-- `--dry-run` — skips side effects like `npm install`; useful for CI validation
-- `--name <project-name>` — project folder name (required for non-interactive)
-- `--type <frontend|backend>` — project type (required for non-interactive)
-- `--path <target-path>` — where the project will be created (defaults to `./<project-name>`)
-- TypeScript is mandatory in all templates (no `--ts` flag needed).
-
 Pre-commit behavior (what will block a commit)
 
 - Husky pre-commit runs lint/format fixes and tests with coverage.
@@ -114,13 +97,12 @@ Scaffolder repo hooks
 
 Scaffold confirmation
 
-- The CLI prints a summary of dependencies and structure before writing files. It only proceeds after confirmation (`y`) or when `--yes` is used.
+- The CLI prints a summary of dependencies and structure before writing files. It only proceeds after confirmation (`y`).
 - `commit-msg` hook enforces commit subject format: `<ticket-number>: <message>`.
 
 Pull Request checks (GitHub Actions)
 
 - The repository includes a PR workflow (`.github/workflows/pr-check.yml`) that runs on pull requests against `develop`, `qa`, and `main`. It runs the same checks as the pre-commit hook: install, `lint`, `format`, tests with coverage, and validates commit messages and the presence of changeset files in the PR commits.
-- The workflow also performs an **offline-install smoke test** for each generated template: it caches `node_modules` from a successful run and then attempts `npm ci --prefer-offline` inside a generated project to verify installs can be satisfied from the cache. If the cache is missing the smoke test will fail; to seed the cache re-run the template generation job successfully (or run a local `npm ci` and re-trigger the workflow).
   Notes
 
 - After generating a project, run `npm install` inside the generated project and then `npm run prepare` to activate Husky hooks.
