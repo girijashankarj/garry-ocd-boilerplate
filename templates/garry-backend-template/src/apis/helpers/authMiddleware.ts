@@ -2,8 +2,10 @@ import type { Request, Response, NextFunction } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { ERROR_MESSAGES } from '../../common/messages/error';
 
+export const getApiToken = () => process.env.API_TOKEN;
+
 export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
-  const expected = process.env.API_TOKEN;
+  const expected = getApiToken();
   if (!expected) {
     return res.status(StatusCodes.UNAUTHORIZED).json({ error: ERROR_MESSAGES.UNAUTHORIZED });
   }

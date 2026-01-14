@@ -3,4 +3,4 @@ export const asNumber = (value: unknown): number | null => {
   return Number.isFinite(num) ? num : null;
 };
 
-export { authMiddleware } from './authMiddleware';
+export { authMiddleware, getApiToken } from './authMiddleware';

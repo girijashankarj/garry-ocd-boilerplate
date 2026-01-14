@@ -1,5 +1,5 @@
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 import YAML from 'yamljs';
 
 const root = process.cwd();
@@ -24,22 +24,8 @@ const handlers = [
   { name: 'delete-user', method: 'delete', path: '/users/{id}', requestBody: false, status: '200' },
 ];
 
-const components = { schemas: {} };
-const paths = {};
-
-for (const handler of handlers) {
-  const key = toPascalCase(handler.name);
-  const requestSchema = loadSchema(handler.name, 'requestSchema.json');
-  const responseSchema = loadSchema(handler.name, 'responseSchema.json');
-  const errorSchema = loadSchema(handler.name, 'errorSchema.json');
-
-  components.schemas[`${key}Request`] = requestSchema;
-  components.schemas[`${key}Response`] = responseSchema;
-  components.schemas[`${key}Error`] = errorSchema;
-
-  if (!paths[handler.path]) paths[handler.path] = {};
-
-  const operation = {
+const buildOperation = (handler, key) => {
+  const base = {
     summary: `${key} handler`,
     responses: {
       [handler.status]: {
@@ -50,7 +36,7 @@ for (const handler of handlers) {
           },
         },
       },
-      '400': {
+      400: {
         description: 'Bad request',
         content: {
           'application/json': {
@@ -62,27 +48,58 @@ for (const handler of handlers) {
   };
 
   if (handler.requestBody) {
-    operation.requestBody = {
-      required: true,
-      content: {
-        'application/json': {
-          schema: { $ref: `#/components/schemas/${key}Request` },
+    return {
+      ...base,
+      requestBody: {
+        required: true,
+        content: {
+          'application/json': {
+            schema: { $ref: `#/components/schemas/${key}Request` },
+          },
         },
       },
     };
-  } else {
-    operation.parameters = [
+  }
+
+  return {
+    ...base,
+    parameters: [
       {
         name: 'id',
         in: 'path',
         required: true,
         schema: { type: 'string' },
       },
-    ];
-  }
+    ],
+  };
+};
 
-  paths[handler.path][handler.method] = operation;
-}
+const components = handlers.reduce(
+  (acc, handler) => {
+    const key = toPascalCase(handler.name);
+    const nextSchemas = {
+      ...acc.schemas,
+      [`${key}Request`]: loadSchema(handler.name, 'requestSchema.json'),
+      [`${key}Response`]: loadSchema(handler.name, 'responseSchema.json'),
+      [`${key}Error`]: loadSchema(handler.name, 'errorSchema.json'),
+    };
+    return { schemas: nextSchemas };
+  },
+  { schemas: {} }
+);
+
+const paths = handlers.reduce((acc, handler) => {
+  const key = toPascalCase(handler.name);
+  const operation = buildOperation(handler, key);
+  const existing = acc[handler.path] || {};
+  return {
+    ...acc,
+    [handler.path]: {
+      ...existing,
+      [handler.method]: operation,
+    },
+  };
+}, {});
 
 const doc = {
   openapi: '3.0.0',

@@ -1,8 +1,15 @@
-import Ajv, { type JSONSchemaType } from 'ajv';
+/* eslint-disable immutable/no-mutation */
+import Ajv, { type JSONSchemaType, type Options, type ValidateFunction } from 'ajv';
 import addFormats from 'ajv-formats';
 
-const ajv = new Ajv({ allErrors: true });
-addFormats(ajv);
+type AjvLike = {
+  compile: <T>(schema: JSONSchemaType<T>) => ValidateFunction<T>;
+};
+
+const AjvCtor = Ajv as unknown as new (options: Options) => AjvLike;
+const addFormatsFn = addFormats as unknown as (instance: AjvLike) => void;
+const ajv = new AjvCtor({ allErrors: true });
+addFormatsFn(ajv);
 
 export class ValidationError extends Error {
   public readonly details: unknown;

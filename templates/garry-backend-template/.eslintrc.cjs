@@ -7,7 +7,7 @@ module.exports = {
   parserOptions: { ecmaVersion: 2022, sourceType: 'module' },
   rules: {
     'no-console': 'off',
-    'no-warning-comments': ['error', { terms: ['todo', 'fixme'], location: 'any' }],
+    'no-warning-comments': ['error', { terms: ['todo', 'fixme'], location: 'anywhere' }],
     'functional/immutable-data': ['error'],
     'immutable/no-mutation': 'error',
   },

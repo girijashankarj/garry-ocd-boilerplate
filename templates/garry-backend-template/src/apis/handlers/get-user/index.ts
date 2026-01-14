@@ -9,7 +9,11 @@ import type { UserAttributes } from '../../common/types';
 import { loggerError, loggerInfo } from '../../common/utils/loggerUtils';
 import { withWrap } from '../../withWrap';
 import type { IdParam } from '../../common/types';
-import { ValidationError, validateRequest, validateResponse } from '../../common/utils/validationUtils';
+import {
+  ValidationError,
+  validateRequest,
+  validateResponse,
+} from '../../common/utils/validationUtils';
 import { businessValidation } from './logic/businessValidation';
 import { dbOperation } from './logic/dbOperation';
 import { postOperation } from './logic/postOperation';
@@ -25,9 +29,7 @@ const handler = withWrap(async (req, res) => {
     const requestPayload = validateRequest(requestSchema, { id: req.params.id });
     const isValid = businessValidation(requestPayload);
     if (!isValid) {
-      return res
-        .status(StatusCodes.BAD_REQUEST)
-        .json({ error: ERROR_MESSAGES.INVALID_PAYLOAD });
+      return res.status(StatusCodes.BAD_REQUEST).json({ error: ERROR_MESSAGES.INVALID_PAYLOAD });
     }
 
     const prepped = await preOperation(requestPayload);
@@ -49,11 +51,15 @@ const handler = withWrap(async (req, res) => {
     return res.status(StatusCodes.OK).json(responsePayload);
   } catch (err) {
     if (err instanceof ValidationError) {
-      return res
-        .status(StatusCodes.BAD_REQUEST)
-        .json({ error: ERROR_MESSAGES.INVALID_PAYLOAD });
+      return res.status(StatusCodes.BAD_REQUEST).json({ error: ERROR_MESSAGES.INVALID_PAYLOAD });
     }
-    loggerError(ERROR_MESSAGES.UNEXPECTED, err, OPERATIONS.USERS_GET, FILE_NAMES.USERS_HANDLER, 'getUser');
+    loggerError(
+      ERROR_MESSAGES.UNEXPECTED,
+      err,
+      OPERATIONS.USERS_GET,
+      FILE_NAMES.USERS_HANDLER,
+      'getUser'
+    );
     throw err;
   }
 });

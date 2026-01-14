@@ -1,5 +1,9 @@
 import type { JSONSchemaType } from 'ajv';
-import { ValidationError, validateRequest } from '../../../../../src/apis/common/utils/validationUtils';
+import {
+  ValidationError,
+  validateRequest,
+  validateResponse,
+} from '../../../../../src/apis/common/utils/validationUtils';
 
 type Sample = { name: string };
 
@@ -17,4 +21,13 @@ test('validateRequest returns payload when valid', () => {
 
 test('validateRequest throws ValidationError when invalid', () => {
   expect(() => validateRequest(schema, { name: '' })).toThrow(ValidationError);
+});
+
+test('validateResponse returns payload when valid', () => {
+  const res = validateResponse(schema, { name: 'ok' });
+  expect(res.name).toBe('ok');
+});
+
+test('validateResponse throws ValidationError when invalid', () => {
+  expect(() => validateResponse(schema, { name: '' })).toThrow(ValidationError);
 });

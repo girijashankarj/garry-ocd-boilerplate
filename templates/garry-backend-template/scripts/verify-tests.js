@@ -1,23 +1,17 @@
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 
 const root = process.cwd();
 const srcRoot = path.join(root, 'src');
 const testRoot = path.join(root, 'tests', 'src');
 
-function walk(dir) {
+const walk = (dir) => {
   const entries = fs.readdirSync(dir, { withFileTypes: true });
-  const files = [];
-  for (const entry of entries) {
+  return entries.flatMap((entry) => {
     const fullPath = path.join(dir, entry.name);
-    if (entry.isDirectory()) {
-      files.push(...walk(fullPath));
-    } else {
-      files.push(fullPath);
-    }
-  }
-  return files;
-}
+    return entry.isDirectory() ? walk(fullPath) : [fullPath];
+  });
+};
 
 function expectedTestPath(srcFile) {
   const rel = path.relative(srcRoot, srcFile);
@@ -31,11 +25,7 @@ const srcFiles = walk(srcRoot)
   .filter((file) => file.endsWith('.ts') || file.endsWith('.tsx'))
   .filter((file) => !file.endsWith('.d.ts'));
 
-const missing = [];
-for (const file of srcFiles) {
-  const expected = expectedTestPath(file);
-  if (!fs.existsSync(expected)) missing.push(expected);
-}
+const missing = srcFiles.filter((file) => !fs.existsSync(expectedTestPath(file)));
 
 if (missing.length > 0) {
   console.error('Missing tests for src files:');

@@ -5,11 +5,7 @@ import { FILE_NAMES } from '../common/fileNames';
 import { OPERATIONS } from '../common/operations';
 import { loggerError } from './common/utils/loggerUtils';
 
-export type AsyncHandler = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => Promise<unknown>;
+export type AsyncHandler = (req: Request, res: Response, next: NextFunction) => Promise<unknown>;
 
 export function withWrap(handler: AsyncHandler): AsyncHandler {
   return async (req, res, next) => {

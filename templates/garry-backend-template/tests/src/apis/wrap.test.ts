@@ -10,8 +10,9 @@ function mockRes() {
 }
 
 test('withWrap calls handler', async () => {
-  const handler = jest.fn(async (_req: Request, res: Response, _next: NextFunction) => {
+  const handler = jest.fn(async (_req: Request, res: Response, next: NextFunction) => {
     res.status(200).json({ ok: true });
+    next();
   });
   const wrapped = withWrap(handler);
   const res = mockRes();

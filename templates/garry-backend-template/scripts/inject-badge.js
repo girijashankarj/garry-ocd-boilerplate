@@ -1,6 +1,7 @@
 #!/usr/bin/env node
-const fs = require('fs');
-const path = require('path');
+import fs from 'node:fs';
+import path from 'node:path';
+
 const args = process.argv.slice(2);
 const argValue = (key) => {
   const index = args.indexOf(`--${key}`);
@@ -20,13 +21,10 @@ if (!fs.existsSync(readme)) {
   console.error('README.md not found');
   process.exit(1);
 }
-let content = fs.readFileSync(readme, 'utf8');
+const content = fs.readFileSync(readme, 'utf8');
 const badgeSvg = `![${badge} CI](https://github.com/${repo}/actions/workflows/pr-check.yml/badge.svg)`;
-// Replace placeholder or add to top
-if (content.includes(`<!-- CI_BADGE:${badge} -->`)) {
-  content = content.replace(`<!-- CI_BADGE:${badge} -->`, badgeSvg);
-} else {
-  content = `${badgeSvg}\n\n${content}`;
-}
-fs.writeFileSync(readme, content, 'utf8');
+const nextContent = content.includes(`<!-- CI_BADGE:${badge} -->`)
+  ? content.replace(`<!-- CI_BADGE:${badge} -->`, badgeSvg)
+  : `${badgeSvg}\n\n${content}`;
+fs.writeFileSync(readme, nextContent, 'utf8');
 console.log('Badge injected');
