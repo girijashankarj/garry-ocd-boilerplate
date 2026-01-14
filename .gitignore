@@ -3,9 +3,14 @@ dist/
 coverage/
 .env
 .idea
-.vscode
+.vscode/*
+!.vscode/settings.json
+.vscode/*
+!.vscode/settings.json
+!.vscode/launch.json
+!.vscode/tasks.json
+!.vscode/extensions.json
 .DS_Store
 tmp/
 temp/
 *.tgz
-./vscode/extensions.json

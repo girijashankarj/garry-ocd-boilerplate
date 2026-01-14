@@ -1,4 +1,5 @@
-name: 'Notify PRs (root)'
+name: "Notify PRs (root)"
+
 on:
   pull_request:
     types: [opened, reopened, synchronize]
@@ -49,26 +50,24 @@ jobs:
           echo "SLACK_MENTION=$SLACK_MENTION" >> $GITHUB_ENV
           echo "BODY=PR: $PR_TITLE\nAuthor: $PR_USER\nBranch: $BASE_BRANCH\nLabels: $PR_LABELS\nURL: $PR_URL" >> $GITHUB_ENV
 
-      - name: Send Slack (bot + blocks)
+      - name: Send Slack (bot + blocks via curl)
         if: secrets.SLACK_BOT_TOKEN && env.CHANNEL
-        uses: slackapi/slack-github-action@v1
-        with:
-          payload: >-
-            {"channel":"${{ env.CHANNEL }}","blocks":[{"type":"section","text":{"type":"mrkdwn","text":"*New Pull Request* ${{ env.SLACK_MENTION }}\n*${{ env.PR_TITLE }}*"}},{"type":"section","fields":[{"type":"mrkdwn","text":"*Author:*\n<https://github.com/${{ env.PR_USER }}|${{ env.PR_USER }}>"},{"type":"mrkdwn","text":"*Branch:*\n${{ env.BASE_BRANCH }}"}]},{"type":"context","elements":[{"type":"mrkdwn","text":"Labels: ${{ env.PR_LABELS }}"},{"type":"mrkdwn","text":"Repository: ${{ github.repository }}"}]},{"type":"actions","elements":[{"type":"button","text":{"type":"plain_text","text":"View PR"},"url":"${{ env.PR_URL }}"}]}]}
-        
-          env:
-            SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-
-      - name: Fallback: Send Slack via webhook
-        if: secrets.SLACK_WEBHOOK
-        uses: 8398a7/action-slack@v3
-        with:
-          status: custom
-          custom_payload: '{"text":"${{ env.BODY }}"}'
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+          CHANNEL: ${{ env.CHANNEL }}
+        run: |
+          set -euo pipefail
+          if [ -z "${CHANNEL:-}" ]; then
+            echo "no CHANNEL set; skipping"; exit 0
+          fi
+          PR_USER_URL="https://github.com/${PR_USER}"
+          # build payload with jq to avoid YAML quoting issues
+          jq -n --arg channel "$CHANNEL" --arg title "$PR_TITLE" --arg mention "$SLACK_MENTION" \
+            --arg prurl "$PR_URL" --arg author "$PR_USER" --arg branch "$BASE_BRANCH" \
+            --arg labels "$PR_LABELS" --arg repo "$GITHUB_REPOSITORY" \
+            '{channel:$channel,blocks:[{type:"section",text:{type:"mrkdwn",text:("*New Pull Request* "+$mention+"\n*"+$title+"*")}}, {type:"section",fields:[{type:"mrkdwn",text:("*Author:*\n<"+("https://github.com/"+$author)+"|"+$author+">")},{type:"mrkdwn",text:("*Branch:*\n"+$branch)}]}, {type:"context",elements:[{type:"mrkdwn",text:("Labels: "+$labels)},{type:"mrkdwn",text:("Repository: "+$repo)}]}, {type:"actions",elements:[{type:"button",text:{type:"plain_text",text:"View PR"},url:$prurl}]}]}' \
+            > /tmp/payload.json
+          curl -s -X POST -H "Authorization: Bearer ${SLACK_BOT_TOKEN}" -H "Content-type: application/json" --data @/tmp/payload.json https://slack.com/api/chat.postMessage || true
 
       - name: Send Teams (Adaptive Card)
         if: secrets.TEAMS_WEBHOOK
@@ -76,9 +75,4 @@ jobs:
         with:
           webhook: ${{ secrets.TEAMS_WEBHOOK }}
           card: >-
-            {"type":"message","attachments":[{"contentType":"application/vnd.microsoft.card.adaptive","content":{"$schema":"http://adaptivecards.io/schemas/adaptive-card.json","type":"AdaptiveCard","version":"1.2","body":[{"type":"TextBlock","size":"Medium","weight":"Bolder","text":"New Pull Request ${{ env.SLACK_MENTION }}"},{"type":"TextBlock","text":"${{ env.PR_TITLE }}","wrap":true},{"type":"FactSet","facts":[{"title":"Author","value":"${{ env.PR_USER }}"},{"title":"Branch","value":"${{ env.BASE_BRANCH }}"},{"title":"Labels","value":"${{ env.PR_LABELS }}"}]}],"actions":[{"type":"Action.OpenUrl","title":"View PR","url":"${{ env.PR_URL }}"}]}}]}
-
-      - name: Send WhatsApp (webhook)
-        if: secrets.WHATSAPP_WEBHOOK
-        run: |
-          curl -s -X POST -H 'Content-type: application/json' --data "{\"message\": \"${{ env.PR_TITLE }} - ${{ env.PR_URL }}\"}" "${{ secrets.WHATSAPP_WEBHOOK }}" || true
+            {"type":"message","attachments":[{"contentType":"application/vnd.microsoft.card.adaptive","content":{"$schema":"http://adaptivecards.io/schemas/adaptive-card.json","type":"AdaptiveCard","version":"1.2","body":[{"type":"TextBlock","size":"Medium","weight":"Bolder","text":"New Pull Request ${{ env.SLACK_MENTION }}"},{"type":"TextBlock","text":"${{ env.PR_TITLE }}","wrap":true},{"type":"FactSet","facts":[{"title":"Author","value":"${{ env.PR_USER }}

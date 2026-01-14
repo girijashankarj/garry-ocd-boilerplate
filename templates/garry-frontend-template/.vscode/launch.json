@@ -1,0 +1,20 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Vite Dev Server",
+      "type": "pwa-node",
+      "request": "launch",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "env": {
+        "NODE_ENV": "development",
+        "VITE_API_BASE_URL": "http://localhost:5173",
+        "VITE_LOG_LEVEL": "info",
+        "VITE_DATA_MODE": "csv"
+      }
+    }
+  ]
+}
