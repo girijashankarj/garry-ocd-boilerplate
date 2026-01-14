@@ -1,0 +1,16 @@
+# Global Copilot ignore for this repository
+node_modules/
+coverage/
+dist/
+build/
+.next/
+.parcel-cache/
+temp/
+/.cache/
+*.log
+*.lock
+.vscode/
+.idea/
+.DS_Store
+*.env
+.env.*

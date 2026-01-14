@@ -1,0 +1,37 @@
+name: 'Auto-request CODEOWNERS reviewers (frontend template)'
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  request-reviewers:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Request CODEOWNERS reviewers (frontend template)
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            let content = '';
+            if (fs.existsSync('.github/CODEOWNERS')) content = fs.readFileSync('.github/CODEOWNERS','utf8');
+            else if (fs.existsSync('CODEOWNERS')) content = fs.readFileSync('CODEOWNERS','utf8');
+            else if (fs.existsSync('templates/garry-frontend-template/CODEOWNERS')) content = fs.readFileSync('templates/garry-frontend-template/CODEOWNERS','utf8');
+            if (!content) { console.log('No CODEOWNERS file found'); return; }
+            const owners = Array.from(new Set(content.split('\n')
+              .map(l=>l.trim()).filter(l=>l && !l.startsWith('#'))
+              .map(line => line.split(/\s+/).slice(1)).flat()));
+            const users = owners.filter(o => !o.includes('/')).map(o => o.replace(/^@/,''));
+            const teams = owners.filter(o => o.includes('/')).map(o => o.replace(/^@/,'').replace(/^[^/]+\//,''));
+            const pr = context.payload.pull_request;
+            if (!pr) { console.log('No pull request context'); return; }
+            const reviewers = users.filter(u => u && u !== pr.user.login);
+            const team_reviewers = teams.filter(t => t);
+            if (reviewers.length === 0 && team_reviewers.length === 0) { console.log('No reviewers to request'); return; }
+            await github.rest.pulls.requestReviewers({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number,
+              reviewers,
+              team_reviewers
+            });

@@ -1,5 +1,0 @@
-src > apis 
-apis > index.ts , routes.ts, withWrap.ts 
-apis > handlers > get user > index.ts , schema > responseSchema.json requestSchema.json errorSechema.json, logic > preOperation.ts, postOperations.ts, businessValidations.ts, 
-apis > common > types, enums, interfaces, constants, sql, utils > loggerUtils, lodashUtils, dbUtils, modelOperations, 
-apis > helpers 

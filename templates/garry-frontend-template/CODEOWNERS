@@ -1,0 +1,6 @@
+# Frontend template CODEOWNERS
+# Add owners for the frontend template. Use `@org/team` or `@username`.
+
+src/ @your-org/frontend-team
+public/ @your-org/frontend-team
+package.json @your-org/frontend-team

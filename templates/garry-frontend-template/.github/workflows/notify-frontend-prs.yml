@@ -1,0 +1,51 @@
+name: 'Notify PRs (frontend template)'
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+    branches: [main, develop, qa]
+    paths:
+      - 'templates/garry-frontend-template/**'
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Prepare message
+        run: |
+          echo "PR_TITLE=${{ github.event.pull_request.title }}" >> $GITHUB_ENV
+          echo "PR_URL=${{ github.event.pull_request.html_url }}" >> $GITHUB_ENV
+          echo "PR_USER=${{ github.event.pull_request.user.login }}" >> $GITHUB_ENV
+          echo "BASE_BRANCH=${{ github.event.pull_request.base.ref }}" >> $GITHUB_ENV
+          echo "BODY=Frontend template PR: $PR_TITLE\nAuthor: $PR_USER\nBranch: $BASE_BRANCH\nURL: $PR_URL" >> $GITHUB_ENV
+
+      - name: Send Slack notification (recommended: bot token & blocks)
+        if: secrets.SLACK_BOT_TOKEN && secrets.SLACK_CHANNEL
+        uses: slackapi/slack-github-action@v1
+        with:
+          payload: >-
+            {"channel":"${{ secrets.SLACK_CHANNEL }}","blocks":[{"type":"section","text":{"type":"mrkdwn","text":"*New Frontend Template PR* ${SLACK_MENTION}"}},{"type":"section","fields":[{"type":"mrkdwn","text":"*Title:*\n<${{ env.PR_URL }}|${{ env.PR_TITLE }}>"},{"type":"mrkdwn","text":"*Author:*\n${{ env.PR_USER }}\n*Branch:*\n${{ env.BASE_BRANCH }}"}]},{"type":"context","elements":[{"type":"mrkdwn","text":"Labels: $PR_LABELS"}]},{"type":"actions","elements":[{"type":"button","text":{"type":"plain_text","text":"View PR"},"url":"${{ env.PR_URL }}"}]}]}
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+
+      - name: Fallback: Send Slack via webhook (if bot token not provided)
+        if: secrets.SLACK_WEBHOOK && ( !secrets.SLACK_BOT_TOKEN || !secrets.SLACK_CHANNEL )
+        uses: 8398a7/action-slack@v3
+        with:
+          status: custom
+          custom_payload: |
+            {"text": "${{ env.BODY }}"}
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+
+      - name: Send Teams notification (Adaptive Card via in-repo action)
+        if: secrets.TEAMS_WEBHOOK
+        uses: ./.github/actions/teams-notify
+        with:
+          webhook: ${{ secrets.TEAMS_WEBHOOK }}
+          card: >-
+            {"type":"message","attachments":[{"contentType":"application/vnd.microsoft.card.adaptive","content":{"$schema":"http://adaptivecards.io/schemas/adaptive-card.json","type":"AdaptiveCard","version":"1.2","body":[{"type":"TextBlock","size":"Medium","weight":"Bolder","text":"New Frontend Template PR ${SLACK_MENTION}"},{"type":"TextBlock","text":"${{ env.PR_TITLE }}","wrap":true},{"type":"FactSet","facts":[{"title":"Author","value":"${{ env.PR_USER }}"},{"title":"Branch","value":"${{ env.BASE_BRANCH }}"},{"title":"Labels","value":"$PR_LABELS"}]}],"actions":[{"type":"Action.OpenUrl","title":"View PR","url":"${{ env.PR_URL }}"}]}}]}
+
+      - name: Send WhatsApp notification (webhook)
+        if: secrets.WHATSAPP_WEBHOOK
+        run: |
+          curl -s -X POST -H 'Content-type: application/json' --data "{\"message\": \"${{ env.BODY }}\"}" "${{ secrets.WHATSAPP_WEBHOOK }}" || true

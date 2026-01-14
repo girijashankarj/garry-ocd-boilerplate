@@ -1,0 +1,8 @@
+# Repository CODEOWNERS
+# Format: <pattern> <owner1> <owner2>
+# Examples:
+# * @your-org/core-team
+# src/ @your-org/backend-team
+# .github/ @your-org/infra-team
+
+* @your-org/core-team

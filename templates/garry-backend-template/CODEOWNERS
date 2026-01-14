@@ -1,0 +1,5 @@
+# Backend template CODEOWNERS
+# Add owners for the backend template. Use `@org/team` or `@username`.
+
+src/ @your-org/backend-team
+package.json @your-org/backend-team

@@ -1,0 +1,15 @@
+frontend:
+  - 'src/**'
+  - 'public/**'
+  - 'package.json'
+ui:
+  - 'src/components/**'
+assets:
+  - 'src/assets/**'
+tests:
+  - 'tests/**'
+docs:
+  - 'docs/**'
+chore:
+  - '.github/**'
+  - 'scripts/**'

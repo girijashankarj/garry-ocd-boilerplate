@@ -1,0 +1,54 @@
+name: 'Notify on package publish'
+on:
+  release:
+    types: [published]
+  repository_dispatch:
+    types: [npm-published]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Prepare and send notifications
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          TEAMS_WEBHOOK: ${{ secrets.TEAMS_WEBHOOK }}
+          WHATSAPP_WEBHOOK: ${{ secrets.WHATSAPP_WEBHOOK }}
+          GITHUB_EVENT_PATH: ${{ github.event_path }}
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const payload = require(process.env.GITHUB_EVENT_PATH || './.github/event.json');
+            let title = '';
+            let url = '';
+            let author = '';
+            if (context.eventName === 'release') {
+              title = payload.release.name || payload.release.tag_name || payload.release.tag_name;
+              url = payload.release.html_url || '';
+              author = payload.release.author && payload.release.author.login || context.actor;
+            } else if (context.eventName === 'repository_dispatch') {
+              title = (payload.client_payload && payload.client_payload.package_name) || payload.action || 'package published';
+              url = (payload.client_payload && payload.client_payload.url) || '';
+              author = (payload.client_payload && payload.client_payload.published_by) || context.actor;
+            }
+            const body = `Package published: ${title}\nAuthor: ${author}\nURL: ${url}`;
+            const send = async (webhook, data) => {
+              if (!webhook) return null;
+              try {
+                if (typeof fetch !== 'undefined') {
+                  await fetch(webhook, { method: 'POST', body: JSON.stringify(data), headers: { 'Content-Type': 'application/json' } });
+                } else {
+                  const https = require('https');
+                  const u = new URL(webhook);
+                  const req = https.request({ hostname: u.hostname, path: u.pathname + (u.search || ''), method: 'POST', headers: { 'Content-Type': 'application/json' } }, (res) => {});
+                  req.on('error', (e) => console.log('post error', e));
+                  req.write(JSON.stringify(data));
+                  req.end();
+                }
+              } catch (e) {
+                console.log('send error', e.message || e);
+              }
+            };
+            await send(process.env.SLACK_WEBHOOK, { text: body });
+            await send(process.env.TEAMS_WEBHOOK, { text: body });
+            await send(process.env.WHATSAPP_WEBHOOK, { message: body });

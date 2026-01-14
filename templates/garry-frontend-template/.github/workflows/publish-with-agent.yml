@@ -1,0 +1,21 @@
+name: 'Template: Publish frontend (example using publish-agent)'
+on:
+  workflow_dispatch: {}
+
+jobs:
+  publish-template-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Publish frontend template using repo publish-agent
+        uses: ./.github/actions/publish-agent
+        with:
+          folder: './templates/garry-frontend-template'
+          registry-url: ${{ secrets.ARTIFACTORY_URL }}

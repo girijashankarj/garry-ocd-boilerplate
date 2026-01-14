@@ -1,0 +1,15 @@
+backend:
+  - 'src/**'
+  - 'package.json'
+  - 'config/**'
+api:
+  - 'src/apis/**'
+db:
+  - 'src/db/**'
+tests:
+  - 'tests/**'
+docs:
+  - 'docs/**'
+chore:
+  - '.github/**'
+  - 'scripts/**'

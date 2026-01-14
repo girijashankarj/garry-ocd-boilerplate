@@ -1,0 +1,11 @@
+# Frontend template: Copilot ignore
+node_modules/
+dist/
+build/
+coverage/
+.cache/
+public/assets/
+temp/
+*.log
+*.env
+.env.*

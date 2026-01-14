@@ -6,4 +6,6 @@ coverage/
 .vscode
 .DS_Store
 tmp/
+temp/
 *.tgz
+./vscode/extensions.json

@@ -1,0 +1,9 @@
+# Backend template: Copilot ignore
+node_modules/
+dist/
+build/
+coverage/
+temp/
+*.log
+*.env
+.env.*
